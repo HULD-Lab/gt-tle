@@ -5,7 +5,9 @@ import json
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
-import urllib, urllib3, http.cookiejar
+import urllib
+import urllib3
+import http.cookiejar
 import datetime
 from flask import Flask, jsonify
 plt.ion()
@@ -94,7 +96,7 @@ def doEverything(id):
     print("latitude:",lat,"longitude:",lon)
     '''
 
-    return jsonify(latlon.to_json(orient='split'))
+    return jsonify(latlon.to_dict(orient='split'))
 
 
 if __name__ == "__main__":
