@@ -1,4 +1,4 @@
-# From satellite ID to groundtrack
+# Convert satellite ID to groundtrack
 > by [HULD](https://huld.io)
 
 This is a tool to get the groundtrack from a certain satellite by having as input its satellite ID and the time at which the user wants to know its position. To find the ID of the satellite www.celestrak.com/NORAD/elements can be used. The website categorizes the satellites and give their respective TLE.
@@ -41,9 +41,14 @@ docker-compose up
 ```
 <docker IP>:5000/get/<NORAD_ID>
 ```
+**On Linux**
 ```
 e.g http://127.0.0.1:5000/get/42790
 ```
+**On Windows** version XP,7,8 (i.e. without shell sub-system)
+```
+e.g 192.168.99.100:5000/get/42790  #correct IP will be displayed during booting up docker machine
+``` 
 Will output
 ```
 {
