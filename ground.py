@@ -19,6 +19,10 @@ app = Flask(__name__)
 with open("secret.json", encoding="UTF-8") as f:
     jsonConfig = json.load(f, encoding="utf8")
 
+#Loading settings
+with open("settings.json", encoding="UTF-8") as sf:
+    jsonSetting = json.load(sf, encoding="utf8")
+
 @app.route("/get/<id>")
 def doEverything(id):
 #!Refactoring needed
@@ -74,9 +78,10 @@ def doEverything(id):
     predictor = source.get_predictor("SAT") #TIROS N for example
 
     print("Input time: (ex. 2020-01-28 23:00)")
-    start_time = datetime.datetime.now()
+    start_time = datetime.datetime.utcnow()
     #start_time="2020-01-28 23:00"
-    dates = pd.date_range(start=start_time, periods=5, freq="1S")
+    dates = pd.date_range(start=start_time, periods=jsonSetting["n-points"],
+                          freq=str(jsonSetting["time-resolution"])+"S")
 
     latlon = pd.DataFrame(index=dates, columns=['lat', 'lon'])
 
