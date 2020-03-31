@@ -17,7 +17,7 @@ Its groundtrack is calculated from the TLE using the orbit_predictor python libr
 ## Requirements
 * Docker installed
 * Optionally PowerBI installed
-* Create a USERNAME and PASSWORD for the https://www.space-track.org/ which you have to fill in the script.
+* Create USERNAME and PASSWORD for the https://www.space-track.org/ which you have to fill in the script.
 ## Update Secret.json
 * See the examples in /secret_sample.json
 * Update this file with outlook credentials and other parameters you wish tune
