@@ -1,5 +1,4 @@
 flask
-cartopy
 numpy
 matplotlib
 urllib3
@@ -9,4 +8,4 @@ ipywidgets
 orbit_predictor
 pandas
 scipy
-shapely --no-binary shapely
+

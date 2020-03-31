@@ -1,2 +1,4 @@
 __pycache__
-demo-env
+.vscode
+gt-env
+secret.json
