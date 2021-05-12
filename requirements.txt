@@ -1,12 +1,7 @@
 flask
-numpy
-matplotlib
-urllib3
-plotly
 cookiejar
-ipywidgets
 orbit_predictor
 pandas
-scipy
 Flask-Caching
+uwsgi
 

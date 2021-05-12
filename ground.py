@@ -1,17 +1,10 @@
-from orbit_predictor.sources import NoradTLESource
-from orbit_predictor.locations import Location
 from orbit_predictor.sources import get_predictor_from_tle_lines
-from plotly.graph_objs import Figure, FigureWidget
 import json
-import numpy as np
-import matplotlib.pyplot as plt
 import pandas as pd
 import urllib
-import urllib3
 import http.cookiejar
 import datetime
 from flask import Flask, jsonify, request
-from collections import namedtuple
 from flask_caching import Cache
 import sys
 
@@ -31,8 +24,6 @@ app = Flask(__name__)
 app.config.from_mapping(config)
 cache = Cache(app)
 
-plt.ion()
-
 class CacheablePredictor():
     def __init__(self,predictor):
         self.predictor = predictor
@@ -48,6 +39,7 @@ def load_file(filename):
     
     return json_data
 
+@cache.memoize(timeout=86400)
 def initialiaze_app(cred_file, setting_file):
     json_config = load_file(cred_file)
     json_setting = load_file(setting_file)
@@ -88,7 +80,7 @@ def predict_gt(predictor,start_time, time_resolution, n_points ):
     for date in dates:
         lat, lon, height = predictor.get_position(date).position_llh
         latlon.loc[date] = (lat, lon, height)
-    print(f"PREDICTED Ground Track (GT) for SATID={id} @:{start_time}", file=sys.stderr)
+    print(f"PREDICTED Ground Track (GT) for SATID={predictor.sate_id} @:{start_time}", file=sys.stderr)
     return latlon
 
 @cache.memoize(timeout=600)
@@ -101,6 +93,9 @@ def predict_gt_cacheable(predictor_c,time_resolution, n_points ):
 
 @app.route("/get/<id>")
 def calc_ground_track(id):
+    cred_file = "secret.json"
+    setting_file = "settings.json"
+    g_credentials, g_settings= initialiaze_app(cred_file, setting_file)
     start_t = datetime.datetime.now()
     tle_lines = get_tle(id,g_credentials)
     print(f"PROCESSING TLE: {tle_lines}", file=sys.stderr )
@@ -139,7 +134,8 @@ def calc_ground_track(id):
 
 
 if __name__ == "__main__":
-    cred_file = "secret.json"
-    setting_file = "settings.json"
-    g_credentials, g_settings= initialiaze_app(cred_file, setting_file)
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    print("RUNNING GT TOOL", file=sys.stderr)
+    #cred_file = "secret.json"
+    #setting_file = "settings.json"
+    #g_credentials, g_settings= initialiaze_app(cred_file, setting_file)
+    #app.run(host='0.0.0.0', port=5000, debug=True)
