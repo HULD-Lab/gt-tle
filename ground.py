@@ -74,12 +74,12 @@ def predict_gt(predictor,start_time, time_resolution, n_points ):
     #!! if the start time is moved inside the function, then the function can be memoized but side effect would be that the predictions would always start at the cached time
     dates = pd.date_range(start=start_time, periods=n_points,
                           freq=time_resolution)
+    timestamp_index = list(map(lambda x: int(pd.Timestamp(x).timestamp()), dates))
+    latlon = pd.DataFrame(index=timestamp_index, columns=['lat', 'lon','height'])
 
-    latlon = pd.DataFrame(index=dates, columns=['lat', 'lon','height'])
-
-    for date in dates:
-        lat, lon, height = predictor.get_position(date).position_llh
-        latlon.loc[date] = (lat, lon, height)
+    for tmstmp in timestamp_index:
+        lat, lon, height = predictor.get_position(datetime.datetime.fromtimestamp(tmstmp)).position_llh
+        latlon.loc[tmstmp] = (lat, lon, height)
     print(f"PREDICTED Ground Track (GT) for SATID={predictor.sate_id} @:{start_time}", file=sys.stderr)
     return latlon
 
